@@ -47,8 +47,6 @@ const AddStudents = () => {
 							type="text"
 							id="name"
 							ref={studentNameRef}
-							// value={mytitle}
-							// onChange={handleTitleInput}
 							required
 							spellCheck="false"
 							autoFocus
@@ -61,8 +59,6 @@ const AddStudents = () => {
 							type="tel"
 							id="phone"
 							ref={studentMobileRef}
-							// value={mytitle}
-							// onChange={handleTitleInput}
 							required
 							spellCheck="false"
 						/>
@@ -74,8 +70,6 @@ const AddStudents = () => {
 							type="text"
 							id="address"
 							ref={studentAddressRef}
-							// value={mytitle}
-							// onChange={handleTitleInput}
 							required
 							spellCheck="false"
 						/>
