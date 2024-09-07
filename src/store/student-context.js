@@ -46,9 +46,24 @@ export const StudentProvider = ({ children }) => {
 		}
 	};
 
-	const editStudentHandler = (edit) => {
+	const editStudentHandler = async (edit) => {
 		console.log(edit);
+		try {
+			const response = await axios.put(`${API_URL}/${edit._id}`, edit);
+			setStudents((prevStudent) => {
+				return prevStudent.map((editStudent) =>
+					editStudent._id === edit._id ? { ...edit, _id: edit._id } : editStudent
+				);
+			});
+			console.log(response.status, response.statusText, 'List Updated PUT SUccess');
+		} catch (error) {
+			console.log('error');
+		}
 	};
+
+	const [editStudent, setEditStudent] = useState(null);
+	const [edit, setEdit] = useState(false);
+	// const handleEditData = () => {};
 
 	const studentCtx = {
 		students,
@@ -56,6 +71,10 @@ export const StudentProvider = ({ children }) => {
 		deleteStudentHandler,
 
 		editStudentHandler,
+		editStudent,
+		setEditStudent,
+		edit,
+		setEdit,
 
 		isDisplay,
 		setISDisplay,

@@ -6,7 +6,8 @@ import useStudents from '../../store/student-context';
 const AddStudents = () => {
 	// let addStudentForm =
 	const { isDisplay, setISDisplay } = useStudents();
-	const { addStudentHandler } = useStudents();
+	const { addStudentHandler, editStudentHandler, editStudent, setEditStudent, edit } =
+		useStudents();
 	const studentNameRef = useRef();
 	const studentMobileRef = useRef();
 	const studentAddressRef = useRef();
@@ -14,18 +15,25 @@ const AddStudents = () => {
 	const submitHandler = (event) => {
 		event.preventDefault();
 
-		const studentData = {
-			name: studentNameRef.current.value,
-			phone: studentMobileRef.current.value,
-			address: studentAddressRef.current.value,
-		};
-
-		// console.log(studentData);
-		addStudentHandler(studentData);
+		if (!edit) {
+			const studentData = {
+				name: studentNameRef.current.value,
+				phone: studentMobileRef.current.value,
+				address: studentAddressRef.current.value,
+			};
+			// console.log(studentData);
+			addStudentHandler(studentData);
+		} else {
+			console.log(editStudent);
+			studentNameRef.current.value = editStudent.name;
+			studentMobileRef.current.value = editStudent.phone;
+			studentAddressRef.current.value = editStudent.address;
+		}
 
 		studentNameRef.current.value = '';
 		studentMobileRef.current.value = '';
 		studentAddressRef.current.value = '';
+		closeForm();
 	};
 
 	const closeForm = () => {

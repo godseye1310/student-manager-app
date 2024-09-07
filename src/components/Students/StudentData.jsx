@@ -2,12 +2,27 @@ import React from 'react';
 import useStudents from '../../store/student-context';
 
 const StudentData = (props) => {
-	const { deleteStudentHandler } = useStudents();
+	const { setISDisplay, deleteStudentHandler, setEdit, setEditStudent } = useStudents();
 
 	const handleDelete = () => {
 		console.log(props.id);
 		deleteStudentHandler(props.id);
 	};
+
+	const hanndleEdit = () => {
+		const editData = {
+			name: props.name,
+			phone: props.phone,
+			address: props.address,
+			_id: props.id,
+		};
+
+		setISDisplay(true);
+		// console.log(editData);
+		setEdit(true);
+		setEditStudent(editData);
+	};
+
 	return (
 		<li>
 			<div style={{ display: 'flex' }}>
@@ -19,7 +34,7 @@ const StudentData = (props) => {
 					<button onClick={handleDelete}>
 						<span>Remove</span>
 					</button>
-					<button onClick={props.onEdit}>
+					<button onClick={hanndleEdit}>
 						<span>Edit</span>
 					</button>
 				</p>
