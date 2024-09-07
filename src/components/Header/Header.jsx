@@ -9,7 +9,7 @@ const Header = () => {
 	};
 
 	return (
-		<div>
+		<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
 			<h1>Student Manager</h1>
 
 			<p>
@@ -17,7 +17,7 @@ const Header = () => {
 			</p>
 
 			<button onClick={showForm} type="button">
-				Add Students
+				Add New Students
 			</button>
 		</div>
 	);

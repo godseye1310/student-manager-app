@@ -1,43 +1,36 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import ModalOverlay from '../UI/ModalOverlay';
 import styles from './AddStudents.module.css';
 import useStudents from '../../store/student-context';
 
 const AddStudents = () => {
-	// let addStudentForm =
 	const { isDisplay, setISDisplay } = useStudents();
-	const { addStudentHandler, editStudentHandler, editStudent, setEditStudent, edit } =
-		useStudents();
-	const studentNameRef = useRef();
-	const studentMobileRef = useRef();
-	const studentAddressRef = useRef();
+
+	const { studentNameRef, studentMobileRef, studentAddressRef } = useStudents();
+	const { addStudentHandler, editStudentHandler, editStudent, setEditStudent } = useStudents();
 
 	const submitHandler = (event) => {
 		event.preventDefault();
 
-		if (!edit) {
-			const studentData = {
-				name: studentNameRef.current.value,
-				phone: studentMobileRef.current.value,
-				address: studentAddressRef.current.value,
-			};
+		const studentData = {
+			name: studentNameRef.current.value,
+			phone: studentMobileRef.current.value,
+			address: studentAddressRef.current.value,
+		};
+
+		if (!editStudent) {
 			// console.log(studentData);
 			addStudentHandler(studentData);
 		} else {
 			console.log(editStudent);
-			studentNameRef.current.value = editStudent.name;
-			studentMobileRef.current.value = editStudent.phone;
-			studentAddressRef.current.value = editStudent.address;
+			editStudentHandler(studentData, editStudent._id);
 		}
-
-		studentNameRef.current.value = '';
-		studentMobileRef.current.value = '';
-		studentAddressRef.current.value = '';
 		closeForm();
 	};
 
 	const closeForm = () => {
 		setISDisplay(false);
+		setEditStudent(null);
 		studentNameRef.current.value = '';
 		studentMobileRef.current.value = '';
 		studentAddressRef.current.value = '';
@@ -89,10 +82,7 @@ const AddStudents = () => {
 					</div>
 					<div>
 						<button onClick={closeForm}>Close</button>
-						<button type="submit">
-							Add
-							{/* {!formCtx.editingData ? "Add" : "Update"}  */}
-						</button>
+						<button type="submit">{!editStudent ? 'Add' : 'Update'}</button>
 					</div>
 				</form>
 			</div>

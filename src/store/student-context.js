@@ -1,12 +1,16 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const StudentContext = React.createContext();
 
-const API_URL = 'https://crudcrud.com/api/1180e0b6b3a745e5a44bccd4b3a5decb/StudentList';
+const API_URL = 'https://crudcrud.com/api/1ad0638c5bb04eac8d0214fde46e6e3f/StudentList';
 
 export const StudentProvider = ({ children }) => {
 	const [isDisplay, setISDisplay] = useState(false);
+
+	const studentNameRef = useRef();
+	const studentMobileRef = useRef();
+	const studentAddressRef = useRef();
 
 	const [students, setStudents] = useState([]);
 
@@ -14,8 +18,9 @@ export const StudentProvider = ({ children }) => {
 		// console.log(studentData);
 		try {
 			const response = await axios.post(API_URL, studentData);
+			console.log(response.status, response.statusText, 'Student Add Success');
 			// console.log(response.data);
-			setStudents((prevStudent) => [...prevStudent, response.data]);
+			setStudents((prevStudents) => [...prevStudents, response.data]);
 		} catch (error) {
 			console.log(error);
 		}
@@ -35,10 +40,9 @@ export const StudentProvider = ({ children }) => {
 	}, []);
 
 	const deleteStudentHandler = async (id) => {
-		console.log(id);
 		try {
 			const response = await axios.delete(`${API_URL}/${id}`);
-			console.log(response.status, response.statusText, 'List DELETE Successfully');
+			console.log(response.status, response.statusText, 'Student DELETE Success');
 
 			setStudents((prevStudent) => prevStudent.filter((student) => student._id !== id));
 		} catch (error) {
@@ -46,26 +50,47 @@ export const StudentProvider = ({ children }) => {
 		}
 	};
 
-	const editStudentHandler = async (edit) => {
-		console.log(edit);
+	const editStudentHandler = async (editedStudent, id) => {
+		console.log(editedStudent);
 		try {
-			const response = await axios.put(`${API_URL}/${edit._id}`, edit);
-			setStudents((prevStudent) => {
-				return prevStudent.map((editStudent) =>
-					editStudent._id === edit._id ? { ...edit, _id: edit._id } : editStudent
-				);
-			});
-			console.log(response.status, response.statusText, 'List Updated PUT SUccess');
+			const response = await axios.put(`${API_URL}/${id}`, editedStudent);
+			console.log(response.status, response.statusText, 'Student Updated PUT Success');
+			setStudents((prevStudents) =>
+				prevStudents.map((prevstudent) =>
+					prevstudent._id === id ? { ...editedStudent, _id: id } : prevstudent
+				)
+			);
 		} catch (error) {
 			console.log('error');
 		}
 	};
 
 	const [editStudent, setEditStudent] = useState(null);
-	const [edit, setEdit] = useState(false);
-	// const handleEditData = () => {};
+	const handleEditData = async (editData) => {
+		console.log(editData); //contains the expected data and its logging in the console
+		setEditStudent(editData);
+		// if (editData) {
+		// 	//facing error from here
+		// 	studentNameRef.current.value = editData.name;
+		// 	studentMobileRef.current.value = editData.phone;
+		// 	studentAddressRef.current.value = editData.address;
+		// }
+	};
+	useEffect(() => {
+		if (editStudent && isDisplay) {
+			console.log('form rendered');
+
+			studentNameRef.current.value = editStudent.name;
+			studentMobileRef.current.value = editStudent.phone;
+			studentAddressRef.current.value = editStudent.address;
+		}
+	}, [editStudent, isDisplay]);
 
 	const studentCtx = {
+		studentNameRef,
+		studentMobileRef,
+		studentAddressRef,
+
 		students,
 		addStudentHandler,
 		deleteStudentHandler,
@@ -73,8 +98,7 @@ export const StudentProvider = ({ children }) => {
 		editStudentHandler,
 		editStudent,
 		setEditStudent,
-		edit,
-		setEdit,
+		handleEditData,
 
 		isDisplay,
 		setISDisplay,

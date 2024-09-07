@@ -4,7 +4,7 @@ import StudentData from './StudentData';
 
 const StudentList = () => {
 	const { students } = useStudents();
-	console.log(students);
+	// console.log(students);
 
 	return (
 		<div>

@@ -2,10 +2,9 @@ import React from 'react';
 import useStudents from '../../store/student-context';
 
 const StudentData = (props) => {
-	const { setISDisplay, deleteStudentHandler, setEdit, setEditStudent } = useStudents();
+	const { setISDisplay, deleteStudentHandler, handleEditData } = useStudents();
 
 	const handleDelete = () => {
-		console.log(props.id);
 		deleteStudentHandler(props.id);
 	};
 
@@ -17,10 +16,9 @@ const StudentData = (props) => {
 			_id: props.id,
 		};
 
+		handleEditData(editData);
 		setISDisplay(true);
 		// console.log(editData);
-		setEdit(true);
-		setEditStudent(editData);
 	};
 
 	return (
