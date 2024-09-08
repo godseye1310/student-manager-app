@@ -24,6 +24,7 @@ export const StudentProvider = ({ children }) => {
 					'Content-Type': 'application/json',
 				},
 			});
+			console.log(response.status, response.statusText, 'Student Add Success');
 
 			const data = await response.json();
 			// console.log(data);
@@ -38,6 +39,7 @@ export const StudentProvider = ({ children }) => {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(`${API_URL}.json`);
+				console.log(response.status, response.statusText, 'Fetch on Refresh Success');
 				const data = await response.json();
 				// console.log(data);
 
@@ -61,6 +63,7 @@ export const StudentProvider = ({ children }) => {
 					'Content-Type': 'application/json',
 				},
 			});
+			console.log(response.status, response.statusText, 'Student DELETE Success');
 			if (response.ok) {
 				setStudents((prevStudent) => prevStudent.filter((student) => student.id !== id));
 			}
@@ -72,19 +75,22 @@ export const StudentProvider = ({ children }) => {
 	const editStudentHandler = async (editedStudent, id) => {
 		console.log(editedStudent);
 		try {
-			// const response = await put(`${API_URL}/${id}`, editedStudent);
-
-			setStudents((prevStudents) =>
-				prevStudents.map((prevstudent) =>
-					prevstudent.id === id ? { ...editedStudent, id: id } : prevstudent
-				)
-			);
+			const response = await fetch(`${API_URL}/${id}.json`, {
+				method: 'PUT',
+				body: JSON.stringify(editedStudent),
+			});
+			console.log(response.status, response.statusText, 'Student Updated PUT Success');
+			if (response.ok) {
+				setStudents((prevStudents) =>
+					prevStudents.map((prevstudent) =>
+						prevstudent.id === id ? { ...editedStudent, id: id } : prevstudent
+					)
+				);
+			}
 		} catch (error) {
 			console.log('error');
 		}
 	};
-
-	console.log(students);
 
 	const [editStudent, setEditStudent] = useState(null);
 	const handleEditData = async (editData) => {
