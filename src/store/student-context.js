@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const StudentContext = React.createContext();
 
-const API_URL = 'https://student-manager-5dba1-default-rtdb.asia-southeast1.firebasedatabase.app/';
+const API_URL =
+	'https://student-manager-5dba1-default-rtdb.asia-southeast1.firebasedatabase.app/StudentsData';
 
 export const StudentProvider = ({ children }) => {
 	const [isDisplay, setISDisplay] = useState(false);
@@ -16,19 +17,35 @@ export const StudentProvider = ({ children }) => {
 	const addStudentHandler = async (studentData) => {
 		// console.log(studentData);
 		try {
-			// const response = await post(API_URL, studentData);
+			const response = await fetch(`${API_URL}.json`, {
+				method: 'POST',
+				body: JSON.stringify(studentData),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 
-			setStudents((prevStudents) => [...prevStudents, studentData]);
+			const data = await response.json();
+			// console.log(data);
+			setStudents((prevStudents) => [...prevStudents, { ...studentData, id: data.name }]);
 		} catch (error) {
 			console.log(error);
 		}
 	};
+	console.log(students);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// const response = await get(API_URL);
-				// setStudents(response.data);
+				const response = await fetch(`${API_URL}.json`);
+				const data = await response.json();
+				console.log(data);
+
+				setStudents(() =>
+					Object.keys(data).map((key) => {
+						return { ...data[key], id: key };
+					})
+				);
 			} catch (error) {
 				console.log(error);
 			}
