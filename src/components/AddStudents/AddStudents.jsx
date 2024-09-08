@@ -22,8 +22,8 @@ const AddStudents = () => {
 			// console.log(studentData);
 			addStudentHandler(studentData);
 		} else {
-			console.log(editStudent);
-			editStudentHandler(studentData, editStudent._id);
+			// console.log(editStudent.id);
+			editStudentHandler(studentData, editStudent.id);
 		}
 		closeForm();
 	};

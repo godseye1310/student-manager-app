@@ -32,14 +32,14 @@ export const StudentProvider = ({ children }) => {
 			console.log(error);
 		}
 	};
-	console.log(students);
+	// console.log(students);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(`${API_URL}.json`);
 				const data = await response.json();
-				console.log(data);
+				// console.log(data);
 
 				setStudents(() =>
 					Object.keys(data).map((key) => {
@@ -55,9 +55,15 @@ export const StudentProvider = ({ children }) => {
 
 	const deleteStudentHandler = async (id) => {
 		try {
-			// const response = await delete(`${API_URL}/${id}`);
-
-			setStudents((prevStudent) => prevStudent.filter((student) => student.id !== id));
+			const response = await fetch(`${API_URL}/${id}.json`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			if (response.ok) {
+				setStudents((prevStudent) => prevStudent.filter((student) => student.id !== id));
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -70,13 +76,15 @@ export const StudentProvider = ({ children }) => {
 
 			setStudents((prevStudents) =>
 				prevStudents.map((prevstudent) =>
-					prevstudent._id === id ? { ...editedStudent, id: id } : prevstudent
+					prevstudent.id === id ? { ...editedStudent, id: id } : prevstudent
 				)
 			);
 		} catch (error) {
 			console.log('error');
 		}
 	};
+
+	console.log(students);
 
 	const [editStudent, setEditStudent] = useState(null);
 	const handleEditData = async (editData) => {
@@ -89,10 +97,12 @@ export const StudentProvider = ({ children }) => {
 		// 	studentAddressRef.current.value = editData.address;
 		// }
 	};
+	// had to set ref.values for editData in useEffect instead of  handleEditData() directly because of react batching, async tasks.
+	// the form hadn't rendered as refs ran b4 isDisplay could become true
+	// since form wasnt rendered the ref values weren't set resulting in runtime errors
 	useEffect(() => {
 		if (editStudent && isDisplay) {
-			console.log('form rendered');
-
+			// console.log('form rendered');
 			studentNameRef.current.value = editStudent.name;
 			studentMobileRef.current.value = editStudent.phone;
 			studentAddressRef.current.value = editStudent.address;
