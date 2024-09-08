@@ -13,7 +13,7 @@ const StudentData = (props) => {
 			name: props.name,
 			phone: props.phone,
 			address: props.address,
-			_id: props.id,
+			id: props.id,
 		};
 
 		handleEditData(editData);

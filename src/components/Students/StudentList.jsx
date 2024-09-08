@@ -13,8 +13,8 @@ const StudentList = () => {
 				{students.map((student) => {
 					return (
 						<StudentData
-							key={student._id}
-							id={student._id}
+							key={student.id}
+							id={student.id}
 							name={student.name}
 							phone={student.phone}
 							address={student.address}

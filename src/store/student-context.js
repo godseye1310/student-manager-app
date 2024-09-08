@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const StudentContext = React.createContext();
 
-const API_URL = 'https://crudcrud.com/api/1ad0638c5bb04eac8d0214fde46e6e3f/StudentList';
+const API_URL = 'https://student-manager-5dba1-default-rtdb.asia-southeast1.firebasedatabase.app/';
 
 export const StudentProvider = ({ children }) => {
 	const [isDisplay, setISDisplay] = useState(false);
@@ -17,10 +17,9 @@ export const StudentProvider = ({ children }) => {
 	const addStudentHandler = async (studentData) => {
 		// console.log(studentData);
 		try {
-			const response = await axios.post(API_URL, studentData);
-			console.log(response.status, response.statusText, 'Student Add Success');
-			// console.log(response.data);
-			setStudents((prevStudents) => [...prevStudents, response.data]);
+			// const response = await post(API_URL, studentData);
+
+			setStudents((prevStudents) => [...prevStudents, studentData]);
 		} catch (error) {
 			console.log(error);
 		}
@@ -29,9 +28,8 @@ export const StudentProvider = ({ children }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios.get(API_URL);
-				console.log(response.status, response.statusText, 'Fetch on Refresh Success');
-				setStudents(response.data);
+				// const response = await get(API_URL);
+				// setStudents(response.data);
 			} catch (error) {
 				console.log(error);
 			}
@@ -41,10 +39,9 @@ export const StudentProvider = ({ children }) => {
 
 	const deleteStudentHandler = async (id) => {
 		try {
-			const response = await axios.delete(`${API_URL}/${id}`);
-			console.log(response.status, response.statusText, 'Student DELETE Success');
+			// const response = await delete(`${API_URL}/${id}`);
 
-			setStudents((prevStudent) => prevStudent.filter((student) => student._id !== id));
+			setStudents((prevStudent) => prevStudent.filter((student) => student.id !== id));
 		} catch (error) {
 			console.log(error);
 		}
@@ -53,11 +50,11 @@ export const StudentProvider = ({ children }) => {
 	const editStudentHandler = async (editedStudent, id) => {
 		console.log(editedStudent);
 		try {
-			const response = await axios.put(`${API_URL}/${id}`, editedStudent);
-			console.log(response.status, response.statusText, 'Student Updated PUT Success');
+			// const response = await put(`${API_URL}/${id}`, editedStudent);
+
 			setStudents((prevStudents) =>
 				prevStudents.map((prevstudent) =>
-					prevstudent._id === id ? { ...editedStudent, _id: id } : prevstudent
+					prevstudent._id === id ? { ...editedStudent, id: id } : prevstudent
 				)
 			);
 		} catch (error) {
