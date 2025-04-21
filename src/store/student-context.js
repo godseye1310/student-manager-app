@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 const StudentContext = React.createContext();
 
 const API_URL =
-	'https://student-manager-5dba1-default-rtdb.asia-southeast1.firebasedatabase.app/StudentsData';
+	"https://react-api-http-requests-default-rtdb.asia-southeast1.firebasedatabase.app/StudentsData";
 
 export const StudentProvider = ({ children }) => {
 	const [isDisplay, setISDisplay] = useState(false);
@@ -18,17 +18,24 @@ export const StudentProvider = ({ children }) => {
 		// console.log(studentData);
 		try {
 			const response = await fetch(`${API_URL}.json`, {
-				method: 'POST',
+				method: "POST",
 				body: JSON.stringify(studentData),
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 			});
-			console.log(response.status, response.statusText, 'Student Add Success');
+			console.log(
+				response.status,
+				response.statusText,
+				"Student Add Success"
+			);
 
 			const data = await response.json();
 			// console.log(data);
-			setStudents((prevStudents) => [...prevStudents, { ...studentData, id: data.name }]);
+			setStudents((prevStudents) => [
+				...prevStudents,
+				{ ...studentData, id: data.name },
+			]);
 		} catch (error) {
 			console.log(error);
 		}
@@ -39,7 +46,11 @@ export const StudentProvider = ({ children }) => {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(`${API_URL}.json`);
-				console.log(response.status, response.statusText, 'Fetch on Refresh Success');
+				console.log(
+					response.status,
+					response.statusText,
+					"Fetch on Refresh Success"
+				);
 				const data = await response.json();
 				// console.log(data);
 
@@ -58,14 +69,20 @@ export const StudentProvider = ({ children }) => {
 	const deleteStudentHandler = async (id) => {
 		try {
 			const response = await fetch(`${API_URL}/${id}.json`, {
-				method: 'DELETE',
+				method: "DELETE",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 			});
-			console.log(response.status, response.statusText, 'Student DELETE Success');
+			console.log(
+				response.status,
+				response.statusText,
+				"Student DELETE Success"
+			);
 			if (response.ok) {
-				setStudents((prevStudent) => prevStudent.filter((student) => student.id !== id));
+				setStudents((prevStudent) =>
+					prevStudent.filter((student) => student.id !== id)
+				);
 			}
 		} catch (error) {
 			console.log(error);
@@ -76,19 +93,25 @@ export const StudentProvider = ({ children }) => {
 		console.log(editedStudent);
 		try {
 			const response = await fetch(`${API_URL}/${id}.json`, {
-				method: 'PUT',
+				method: "PUT",
 				body: JSON.stringify(editedStudent),
 			});
-			console.log(response.status, response.statusText, 'Student Updated PUT Success');
+			console.log(
+				response.status,
+				response.statusText,
+				"Student Updated PUT Success"
+			);
 			if (response.ok) {
 				setStudents((prevStudents) =>
 					prevStudents.map((prevstudent) =>
-						prevstudent.id === id ? { ...editedStudent, id: id } : prevstudent
+						prevstudent.id === id
+							? { ...editedStudent, id: id }
+							: prevstudent
 					)
 				);
 			}
 		} catch (error) {
-			console.log('error');
+			console.log("error");
 		}
 	};
 
@@ -133,7 +156,11 @@ export const StudentProvider = ({ children }) => {
 		setISDisplay,
 	};
 
-	return <StudentContext.Provider value={studentCtx}>{children}</StudentContext.Provider>;
+	return (
+		<StudentContext.Provider value={studentCtx}>
+			{children}
+		</StudentContext.Provider>
+	);
 };
 
 const useStudents = () => useContext(StudentContext);
